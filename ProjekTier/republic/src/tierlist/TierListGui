@@ -1,0 +1,94 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class TierListGUI extends JFrame {
+
+    JTextField txtNama;
+    JComboBox<String> cmbTier;
+
+    JTextArea areaS, areaA, areaB, areaC, areaD;
+
+    public TierListGUI() {
+        setTitle("Tier List Manager");
+        setSize(700, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+
+        // ===== PANEL INPUT =====
+        JPanel panelInput = new JPanel(new FlowLayout());
+
+        txtNama = new JTextField(15);
+        cmbTier = new JComboBox<>(new String[]{"S", "A", "B", "C", "D"});
+        JButton btnTambah = new JButton("Tambah");
+
+        panelInput.add(new JLabel("Nama Item:"));
+        panelInput.add(txtNama);
+        panelInput.add(new JLabel("Tier:"));
+        panelInput.add(cmbTier);
+        panelInput.add(btnTambah);
+
+        add(panelInput, BorderLayout.NORTH);
+
+        // ===== PANEL TIER =====
+        JPanel panelTier = new JPanel(new GridLayout(5, 1));
+
+        areaS = buatTier("S", new Color(255, 120, 120), panelTier);
+        areaA = buatTier("A", new Color(255, 180, 120), panelTier);
+        areaB = buatTier("B", new Color(255, 230, 120), panelTier);
+        areaC = buatTier("C", new Color(255, 255, 150), panelTier);
+        areaD = buatTier("D", new Color(180, 255, 150), panelTier);
+
+        add(panelTier, BorderLayout.CENTER);
+
+        // ===== EVENT =====
+        btnTambah.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                tambahItem();
+            }
+        });
+
+        setVisible(true);
+    }
+
+    private JTextArea buatTier(String nama, Color warna, JPanel parent) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(warna);
+
+        JLabel label = new JLabel("  Tier " + nama);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+
+        JTextArea area = new JTextArea();
+        area.setEditable(false);
+
+        panel.add(label, BorderLayout.WEST);
+        panel.add(new JScrollPane(area), BorderLayout.CENTER);
+
+        parent.add(panel);
+        return area;
+    }
+
+    private void tambahItem() {
+        String nama = txtNama.getText();
+        String tier = cmbTier.getSelectedItem().toString();
+
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nama item kosong!");
+            return;
+        }
+
+        switch (tier) {
+            case "S": areaS.append("- " + nama + "\n"); break;
+            case "A": areaA.append("- " + nama + "\n"); break;
+            case "B": areaB.append("- " + nama + "\n"); break;
+            case "C": areaC.append("- " + nama + "\n"); break;
+            case "D": areaD.append("- " + nama + "\n"); break;
+        }
+
+        txtNama.setText("");
+    }
+
+    public static void main(String[] args) {
+        new TierListGUI();
+    }
+}
